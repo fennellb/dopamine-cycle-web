@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Dopamine Cycle - DBT Skills Map</title>
+
+<style>
+:root {
+    --bg: #f5f5f5;
+    --panel: #ffffff;
+    --text: #222;
+    --secondary: #666;
+    --border: rgba(0,0,0,0.15);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    overflow: hidden;
+}
+
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+.sidebar {
+    width: 230px;
+    min-width: 200px;
+    max-width: 240px;
+    background: #fafafa;
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.title {
+    text-align: center;
+    padding: 20px 10px 15px;
+}
+
+.title h1 {
+    font-size: 16px;
+    margin: 0;
+}
+
+.title p {
+    font-size: 12px;
+    color: var(--secondary);
+    margin: 4px 0;
+}
+
+.cycle-container {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+.cycle {
+    position: relative;
+    width: 210px;
+    height: 210px;
+}
+
+.ring {
+    position: absolute;
+    left: 25px;
+    top: 25px;
+    width: 160px;
+    height: 160px;
+    border: 2px solid rgba(0,0,0,0.12);
+    border-radius: 50%;
+}
+
+.phase-icon {
+    position: absolute;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.phase-icon:hover {
+    transform: scale(1.12);
+}
+
+.center-label {
+    position: absolute;
+    width: 100%;
+    top: 88px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.center-label strong {
+    display: block;
+}
+
+.phase-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.phase-button {
+    width: 100%;
+    text-align: left;
+    padding: 9px 12px;
+    margin-bottom: 6px;
+    border-radius: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background .2s;
+}
+
+.phase-button:hover {
+    background: rgba(0,0,0,.05);
+}
+
+.phase-button.selected {
+    font-weight: bold;
+}
+
+.navigation {
+    display: flex;
+    border-top: 1px solid var(--border);
+}
+
+.navigation button {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.details {
+    flex: 1;
+    overflow-y: auto;
+    background: #fff;
+    padding: 20px;
+}
+
+.header {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+}
+
+h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.quote {
+    color: var(--secondary);
+    font-style: italic;
+    font-size: 13px;
+}
+
+.box {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+.label {
+    font-size: 11px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-bottom: 5px;
+}
+
+.skill {
+    margin-top: 8px;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f7f7f7;
+}
+
+.skill-name {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.skill-note {
+    font-size: 12px;
+    color: var(--secondary);
+}
+
+.goal {
+    margin-top: 15px;
+    padding: 12px;
+    border-left: 4px solid;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="app">
+
+    <div class="sidebar">
+
+        <div class="title">
+            <h1>Dopamine Cycle</h1>
+            <p>DBT Skills Map</p>
+        </div>
+
+        <div class="cycle-container">
+            <div id="cycle" class="cycle">
+                <div class="ring"></div>
+                <div id="centerLabel" class="center-label"></div>
+            </div>
+        </div>
+
+        <div id="phaseList" class="phase-list"></div>
+
+        <div class="navigation">
+            <button id="previous">&#8249;</button>
+            <button id="next">&#8250;</button>
+        </div>
+
+    </div>
+
+
+    <div id="details" class="details"></div>
+
+</div>
+
+
+<script>
+const phases = [
+    {
+        id: 0,
+        label: "Boredom",
+        icon: "○",
+        color: "#185fa4",
+        light: "#e6f0fa",
+        title: "Boredom / Under-stimulation",
+        quote: "Nothing feels engaging; I need something now",
+        risk: "Impulsive novelty-seeking, avoidance of responsibilities",
+        goal: "Tolerate low stimulation without immediate escape",
+        skills: [
+            {
+                name: "Mindfulness - observe/describe",
+                note: "\"This is boredom + under-stimulation.\""
+            },
+            {
+                name: "Radical acceptance",
+                note: "Boredom is an expected state, not an emergency."
+            },
+            {
+                name: "Opposite action (gentle)",
+                note: "Do small engagement - not big dopamine chasing."
+            },
+            {
+                name: "PLEASE skill",
+                note: "Sleep, food, hydration first. Low baseline worsens urgency."
+            }
+        ]
+    },
+
+    {
+        id: 1,
+        label: "Urgency",
+        icon: "⚡",
+        color: "#855008",
+        light: "#faefd9",
+        title: "Dopamine Seeking / Urgency Spike",
+        quote: "I need to do something interesting RIGHT NOW",
+        risk: "Task switching, rabbit holes, impulsive commitments",
+        goal: "Prevent impulsive escalation into hyperfocus traps",
+        skills: [
+            {
+                name: "STOP skill",
+                note: "Stop - Take a step back - Observe the urge spike - Proceed mindfully."
+            },
+            {
+                name: "Urge surfing",
+                note: "Urgency rises and falls like a wave. Ride it, don't act on it."
+            },
+            {
+                name: "Delay + distract",
+                note: "\"Wait 10 minutes before acting.\""
+            },
+            {
+                name: "Wise mind check",
+                note: "Is this aligned with long-term goals, or just stimulation?"
+            }
+        ]
+    },
+
+    {
+        id: 2,
+        label: "Hyperfocus",
+        icon: "◎",
+        color: "#534abe",
+        light: "#eeecfc",
+        title: "Hyperfocus / High Engagement",
+        quote: "I'm locked in; time disappears",
+        risk: "Missed meals, sleep loss, overcommitment",
+        goal: "Keep engagement without losing regulation",
+        skills: [
+            {
+                name: "Mindfulness of current activity",
+                note: "Periodic check-ins: what is my body doing right now?"
+            },
+            {
+                name: "Interoceptive awareness",
+                note: "Notice hunger, fatigue, tension signals."
+            },
+            {
+                name: "Planned pausing",
+                note: "Set timers, alarms, transition cues before the dive."
+            },
+            {
+                name: "Self-validation",
+                note: "\"This focus is real and useful - but not infinite.\""
+            }
+        ]
+    },
+
+    {
+        id: 3,
+        label: "Overload",
+        icon: "⚠",
+        color: "#a32d2d",
+        light: "#fbe9e9",
+        title: "Overload / Sensory + Cognitive Saturation",
+        quote: "Too much; everything feels heavy or irritating",
+        risk: "Shutdown, irritability, emotional flooding",
+        goal: "Downshift physiological arousal",
+        skills: [
+            {
+                name: "TIPP skills (fast regulation)",
+                note: "Temperature - Intense exercise - Paced breathing - Paired muscle relaxation."
+            },
+            {
+                name: "Reduce input",
+                note: "Dim lights, quiet noise, drop tasks."
+            },
+            {
+                name: "One-mindfulness",
+                note: "One thing only - no multitasking."
+            },
+            {
+                name: "Radical acceptance",
+                note: "\"I am overloaded right now; this will pass.\""
+            }
+        ]
+    },
+
+    {
+        id: 4,
+        label: "Burnout",
+        icon: "▣",
+        color: "#44443f",
+        light: "#f1f0e9",
+        title: "Burnout / Shutdown",
+        quote: "I can't do anything; everything feels impossible",
+        risk: "Avoidance spiral, guilt, depression-like state",
+        goal: "Restart motion without forcing full capacity",
+        skills: [
+            {
+                name: "Self-validation (critical)",
+                note: "\"My system is depleted, not broken.\""
+            },
+            {
+                name: "PLEASE skill (again)",
+                note: "Rebuild basics first - don't skip this."
+            },
+            {
+                name: "Smallest effective action",
+                note: "\"1% task version only.\" Behavioral activation at micro-scale."
+            },
+            {
+                name: "Radical acceptance of limits",
+                note: "Opposite action at tiny scale: 2-5 minute starter tasks."
+            }
+        ]
+    },
+
+    {
+        id: 5,
+        label: "Recovery",
+        icon: "🍃",
+        color: "#3b6d11",
+        light: "#ebf5df",
+        title: "Recovery / Low-Energy Stabilization",
+        quote: "I'm okay again, but everything feels dull",
+        risk: "Boredom -> restarting the cycle too aggressively",
+        goal: "Rebuild baseline without triggering extremes",
+        skills: [
+            {
+                name: "Build mastery",
+                note: "Small consistent wins. Not big ambitious ones yet."
+            },
+            {
+                name: "Pleasant events scheduling",
+                note: "Low-stimulation pleasures - not dopamine spikes."
+            },
+            {
+                name: "Mindfulness of positive experience",
+                note: "Notice what feels okay. Let it register."
+            },
+            {
+                name: "Wise mind planning",
+                note: "Don't jump straight to high-stimulation commitments."
+            }
+        ]
+    }
+];
+
+let selectedPhaseID = 0;
+function renderCycle() {
+    const cycle = document.getElementById("cycle");
+
+    // Remove old phase buttons but keep ring and center label
+    document.querySelectorAll(".phase-icon").forEach(e => e.remove());
+
+    phases.forEach(phase => {
+        const angle = phase.id * (360 / phases.length) - 90;
+        const radians = angle * Math.PI / 180;
+
+        const radius = 80;
+        const x = Math.cos(radians) * radius;
+        const y = Math.sin(radians) * radius;
+
+        const button = document.createElement("button");
+        button.className = "phase-icon";
+        button.textContent = phase.icon;
+
+        button.style.left = (105 + x - 19) + "px";
+        button.style.top = (105 + y - 19) + "px";
+
+        button.style.background =
+            phase.id === selectedPhaseID
+                ? phase.color
+                : "#ffffff";
+
+        button.style.color =
+            phase.id === selectedPhaseID
+                ? "#ffffff"
+                : phase.color;
+
+        button.style.boxShadow =
+            phase.id === selectedPhaseID
+                ? "0 0 10px " + phase.color
+                : "none";
+
+        button.onclick = () => {
+            selectedPhaseID = phase.id;
+            render();
+        };
+
+        cycle.appendChild(button);
+    });
+
+
+    const selected = phases[selectedPhaseID];
+
+    document.getElementById("centerLabel").innerHTML =
+        "<strong style='color:" + selected.color + "'>" +
+        selected.label +
+        "</strong>" +
+        "phase " + (selectedPhaseID + 1) +
+        "/" + phases.length;
+}
+
+
+function renderPhaseList() {
+    const list = document.getElementById("phaseList");
+
+    list.innerHTML = "";
+
+    phases.forEach(phase => {
+
+        const button = document.createElement("button");
+        button.className = "phase-button";
+
+        if (phase.id === selectedPhaseID) {
+            button.classList.add("selected");
+            button.style.background = phase.light;
+            button.style.color = phase.color;
+        }
+
+        button.innerHTML =
+            phase.icon + " &nbsp; " + phase.label;
+
+        button.onclick = () => {
+            selectedPhaseID = phase.id;
+            render();
+        };
+
+        list.appendChild(button);
+    });
+}
+
+
+function renderDetails() {
+
+    const phase = phases[selectedPhaseID];
+
+    let html = "";
+
+    html += `
+        <div class="header">
+
+            <div class="header-icon"
+                 style="background:${phase.light};
+                        color:${phase.color}">
+                ${phase.icon}
+            </div>
+
+            <div>
+                <h2>${phase.title}</h2>
+                <div class="quote">
+                    "${phase.quote}"
+                </div>
+            </div>
+
+        </div>
+    `;
+
+
+    html += `
+        <div class="box">
+            <div class="label">RISK</div>
+            ${phase.risk}
+        </div>
+    `;
+
+
+    html += `
+        <h3 style="
+            margin-top:18px;
+            font-size:11px;
+            letter-spacing:1px;
+            color:#666;">
+            DBT SKILLS FOR THIS PHASE
+        </h3>
+    `;
+
+
+    phase.skills.forEach(skill => {
+
+        html += `
+            <div class="skill">
+
+                <div class="skill-name">
+                    ${skill.name}
+                </div>
+
+                <div class="skill-note">
+                    ${skill.note}
+                </div>
+
+            </div>
+        `;
+    });
+
+
+    html += `
+        <div class="goal"
+             style="border-color:${phase.color};
+                    background:${phase.light}">
+
+            <div class="label"
+                 style="color:${phase.color}">
+                GOAL
+            </div>
+
+            ${phase.goal}
+
+        </div>
+    `;
+
+
+    document.getElementById("details").innerHTML = html;
+}
+
+
+function render() {
+    renderCycle();
+    renderPhaseList();
+    renderDetails();
+}
+
+
+document.getElementById("previous").onclick = function() {
+
+    selectedPhaseID =
+        (selectedPhaseID - 1 + phases.length)
+        % phases.length;
+
+    render();
+};
+
+
+document.getElementById("next").onclick = function() {
+
+    selectedPhaseID =
+        (selectedPhaseID + 1)
+        % phases.length;
+
+    render();
+};
+
+
+// Initial display
+render();
+
+</script>
+
+</body>
+</html>
