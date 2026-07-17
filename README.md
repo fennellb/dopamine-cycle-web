@@ -2,7 +2,7 @@
 
 An interactive visual map of an AuDHD dopamine/attention regulation cycle, paired with DBT-inspired skills for each phase.
 
-[Try the Dopamine Cycle App](https://fennellb.github.io/dopamine-cycle-web/DopamineCycleApp.html)
+[Try the Dopamine Cycle App](https://fennellb.github.io/dopamine-cycle-web/web/DopamineCycleApp.html)
 
 ## Overview
 
