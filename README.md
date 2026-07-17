@@ -39,11 +39,13 @@ The purpose of the map is:
 
 ## Screenshots
 
-(Add screenshots here)
+Stand Alone Apple MacOS App
 
-Example:
+![Dopamine Cycle Screenshot MacOS](images/screenshot.jpg)
 
-![Dopamine Cycle Screenshot](images/screenshot.jpg)
+Web Based XHTML and Javascript
+
+![Dopamine Cycle Screenshot XHTML](images/screenshot2.jpg)
 
 ## Versions
 
