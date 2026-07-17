@@ -207,7 +207,7 @@ Skills:
 - Self-validation
 - PLEASE skill
 - Smallest Effective Action
-- Tiny Opposite Action
+- Radical acceptance of limits (tiny Opposite Action)
 
 Goal:
 
