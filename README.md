@@ -45,7 +45,7 @@ Stand Alone Apple MacOS App
 
 Web Based XHTML and Javascript
 
-![Dopamine Cycle Screenshot XHTML](images/screenshot2.jpg)
+![Dopamine Cycle Screenshot XHTML](images/screenshot-xhtml.jpg)
 
 ## Versions
 
