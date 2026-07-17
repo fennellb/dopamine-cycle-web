@@ -2,6 +2,8 @@
 
 An interactive visual map of an AuDHD dopamine/attention regulation cycle, paired with DBT-inspired skills for each phase.
 
+https://fennellb.github.io/dopamine-cycle-web/DopamineCycleApp.html
+
 ## Overview
 
 The goal of this project is not to "fix" the dopamine cycle, but to recognize different states and apply appropriate skills at the right transition points.
