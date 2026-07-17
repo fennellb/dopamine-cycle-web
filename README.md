@@ -43,7 +43,7 @@ The purpose of the map is:
 
 Example:
 
-![Dopamine Cycle Screenshot](images/screenshot.png)
+![Dopamine Cycle Screenshot](images/screenshot.jpg)
 
 ## Versions
 
