@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Social Post Mockup Maker</title>
+  <style type="text/css">
+    :root {
+      color-scheme: light;
+      --ink: #262626;
+      --muted: #777777;
+      --line: #dedede;
+      --paper: #ffffff;
+      --canvas: #f4f4f5;
+      --accent: #8b5e3c;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--canvas);
+      line-height: 1.4;
+    }
+    .page {
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    h1 { margin: 0 0 6px; font-size: 1.7rem; }
+    .intro { margin: 0 0 22px; color: #555; max-width: 720px; }
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(270px, 360px) minmax(280px, 1fr);
+      gap: 28px;
+      align-items: start;
+    }
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .panel h2 { margin: 0 0 14px; font-size: 1.05rem; }
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: .9rem;
+      margin: 13px 0 5px;
+    }
+    input[type="text"], textarea, select {
+      width: 100%;
+      font: inherit;
+      border: 1px solid #c9c9c9;
+      border-radius: 8px;
+      padding: 10px;
+      background: white;
+      color: var(--ink);
+    }
+    textarea { min-height: 112px; resize: vertical; }
+    input[type="file"] { display: block; width: 100%; margin-top: 7px; font-size: .9rem; }
+    .hint { font-size: .8rem; color: var(--muted); margin: 5px 0 0; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    button {
+      border: 1px solid #bdbdbd;
+      background: white;
+      color: var(--ink);
+      border-radius: 9px;
+      padding: 10px 13px;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button.primary { background: #262626; color: white; border-color: #262626; }
+    button:hover { filter: brightness(.96); }
+    .preview-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .preview-label { color: #555; font-size: .9rem; font-weight: 700; }
+    .post {
+      width: min(100%, 390px);
+      background: #fff;
+      border: 1px solid #d6d6d6;
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,.07);
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      min-height: 62px;
+    }
+    .avatar {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #e8d8c4;
+      color: #59432f;
+      font-weight: 700;
+      font-size: 1.1rem;
+      overflow: hidden;
+    }
+    .avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .profile { flex: 1; min-width: 0; }
+    .username { font-weight: 700; font-size: .91rem; overflow-wrap: anywhere; }
+    .subtitle { color: #777; font-size: .73rem; margin-top: 1px; }
+    .more { font-weight: 700; font-size: 1.3rem; letter-spacing: 1px; }
+    .art {
+      min-height: 300px;
+      aspect-ratio: 1 / 1;
+      padding: 28px;
+      background: #efe5d5;
+      color: #493b2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+    .art-kicker {
+      text-transform: uppercase;
+      font-size: .68rem;
+      letter-spacing: .15em;
+      font-weight: 700;
+      opacity: .8;
+      margin-bottom: 20px;
+    }
+    .art-message {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(1.3rem, 3vw, 1.9rem);
+      line-height: 1.2;
+      font-weight: 700;
+      margin: 0;
+    }
+    .art-rule { width: 44px; border-top: 1px solid currentColor; opacity: .45; margin: 20px 0 13px; }
+    .art-attribution { font-size: .76rem; line-height: 1.35; opacity: .85; }
+    .actions {
+      padding: 10px 12px 0;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      font-size: 1.45rem;
+    }
+    .actions .bookmark { margin-left: auto; }
+    .caption { padding: 7px 12px 13px; font-size: .83rem; overflow-wrap: anywhere; white-space: pre-wrap; }
+    .caption strong { font-weight: 700; }
+    .hashtags { color: #386b9a; margin-top: 5px; }
+    .mock-label {
+      text-align: center;
+      font-size: .68rem;
+      color: #888;
+      letter-spacing: .08em;
+      padding: 0 12px 12px;
+    }
+    .status { min-height: 1.2em; color: #444; font-size: .85rem; text-align: center; }
+    .footnote { color: #666; font-size: .8rem; text-align: center; max-width: 390px; }
+    @media (max-width: 760px) {
+      .page { padding: 15px; }
+      .workspace { grid-template-columns: 1fr; }
+      .preview-area { order: -1; }
+      .post { width: min(100%, 360px); }
+    }
+    @media print {
+      body { background: white; }
+      .page { padding: 0; max-width: none; }
+      h1, .intro, .editor, .preview-label, .footnote, .status { display: none !important; }
+      .workspace { display: block; }
+      .preview-area { display: block; }
+      .post { margin: 0 auto; box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <h1>Social Post Mockup Maker</h1>
+    <p class="intro">Enter a short message and this page will turn it into a pretend Instagram-style post for a school project. It does not publish anything online.</p>
+
+    <div class="workspace">
+      <section class="panel editor" aria-label="Post settings">
+        <h2>1. Enter the post details</h2>
+
+        <label for="username">Profile name</label>
+        <input id="username" type="text" value="st.francis.de.sales" />
+
+        <label for="subtitle">Small line under profile name</label>
+        <input id="subtitle" type="text" value="Inspired by St. Francis de Sales" />
+
+        <label for="kicker">Small heading on the picture</label>
+        <input id="kicker" type="text" value="A LITTLE WISDOM FOR TODAY" />
+
+        <label for="message">Main message</label>
+        <textarea id="message">Be patient with yourself.</textarea>
+
+        <label for="attribution">Small line under the message</label>
+        <input id="attribution" type="text" value="A reflection inspired by St. Francis de Sales" />
+
+        <label for="caption">Caption below the picture</label>
+        <textarea id="caption" rows="2">Growth takes time. Treat yourself and others with gentleness, and begin again when you make a mistake.</textarea>
+
+        <label for="hashtags">Hashtags (optional)</label>
+        <input id="hashtags" type="text" value="#Gentleness #FaithInEverydayLife" />
+        <p class="hint">Separate hashtags with spaces. They will appear in blue.</p>
+
+        <label for="theme">Picture background</label>
+        <select id="theme">
+          <option value="sand">Warm parchment</option>
+          <option value="sage">Soft green</option>
+          <option value="sky">Pale blue</option>
+          <option value="rose">Soft rose</option>
+          <option value="dark">Dark and elegant</option>
+        </select>
+
+        <label for="avatarFile">Optional profile picture</label>
+        <input id="avatarFile" type="file" accept="image/*" />
+        <p class="hint">Choose a picture saved on your device. It stays in this page and is not uploaded.</p>
+
+        <div class="buttons">
+          <button class="primary" id="updateButton" type="button">Update preview</button>
+          <button id="resetButton" type="button">Reset example</button>
+        </div>
+      </section>
+
+      <section class="preview-area" aria-label="Post preview">
+        <div class="preview-label">2. Preview your post</div>
+        <article class="post" id="post">
+          <header class="post-header">
+            <div class="avatar" id="avatar">S</div>
+            <div class="profile">
+              <div class="username" id="previewUsername">st.francis.de.sales</div>
+              <div class="subtitle" id="previewSubtitle">Inspired by St. Francis de Sales</div>
+            </div>
+            <div class="more" aria-hidden="true">···</div>
+          </header>
+          <div class="art" id="art">
+            <div class="art-kicker" id="previewKicker">A LITTLE WISDOM FOR TODAY</div>
+            <p class="art-message" id="previewMessage">Be patient with yourself.</p>
+            <div class="art-rule"></div>
+            <div class="art-attribution" id="previewAttribution">A reflection inspired by St. Francis de Sales</div>
+          </div>
+          <div class="actions" aria-label="Illustrative social media icons">
+            <span aria-label="like">♡</span>
+            <span aria-label="comment">▢</span>
+            <span aria-label="share">➤</span>
+            <span class="bookmark" aria-label="bookmark">♧</span>
+          </div>
+          <div class="caption">
+            <div><strong id="captionUsername">st.francis.de.sales</strong> <span id="previewCaption">Growth takes time. Treat yourself and others with gentleness, and begin again when you make a mistake.</span></div>
+            <div class="hashtags" id="previewHashtags">#Gentleness #FaithInEverydayLife</div>
+          </div>
+          <div class="mock-label">MOCK POST FOR A SCHOOL PROJECT</div>
+        </article>
+        <div class="buttons">
+          <button class="primary" id="printButton" type="button">Print / save as PDF</button>
+          <button id="copyButton" type="button">Copy post text</button>
+        </div>
+        <div class="status" id="status" role="status" aria-live="polite"></div>
+        <p class="footnote">Tip: In the print dialog, choose “Save as PDF” if you want to submit the post as a file.</p>
+      </section>
+    </div>
+  </main>
+
+  <script type="text/javascript">
+  //<![CDATA[
+    (function () {
+      "use strict";
+      var ids = ["username", "subtitle", "kicker", "message", "attribution", "caption", "hashtags", "theme"];
+      var defaults = {
+        username: "st.francis.de.sales",
+        subtitle: "Inspired by St. Francis de Sales",
+        kicker: "A LITTLE WISDOM FOR TODAY",
+        message: "Be patient with yourself.",
+        attribution: "A reflection inspired by St. Francis de Sales",
+        caption: "Growth takes time. Treat yourself and others with gentleness, and begin again when you make a mistake.",
+        hashtags: "#Gentleness #FaithInEverydayLife",
+        theme: "sand"
+      };
+      var themes = {
+        sand: { background: "#efe5d5", color: "#493b2a" },
+        sage: { background: "#dce6d8", color: "#304638" },
+        sky: { background: "#dce9f2", color: "#29485c" },
+        rose: { background: "#f1dfdf", color: "#613f45" },
+        dark: { background: "#343434", color: "#f7f0e5" }
+      };
+      var imageData = "";
+      function value(id) {
+        return document.getElementById(id).value;
+      }
+      function setText(id, text) {
+        document.getElementById(id).textContent = text;
+      }
+      function update() {
+        var username = value("username").trim() || "your.profile";
+        setText("previewUsername", username);
+        setText("captionUsername", username);
+        setText("previewSubtitle", value("subtitle"));
+        setText("previewKicker", value("kicker"));
+        setText("previewMessage", value("message"));
+        setText("previewAttribution", value("attribution"));
+        setText("previewCaption", value("caption"));
+        setText("previewHashtags", value("hashtags"));
+        var initial = username.replace(/^@/, "").charAt(0).toUpperCase() || "S";
+        var avatar = document.getElementById("avatar");
+        avatar.textContent = initial;
+        if (imageData) {
+          avatar.textContent = "";
+          var img = document.createElement("img");
+          img.setAttribute("alt", "Profile picture");
+          img.setAttribute("src", imageData);
+          avatar.appendChild(img);
+        }
+        var theme = themes[value("theme")] || themes.sand;
+        var art = document.getElementById("art");
+        art.style.backgroundColor = theme.background;
+        art.style.color = theme.color;
+        document.getElementById("status").textContent = "";
+      }
+      document.getElementById("updateButton").addEventListener("click", update);
+      ids.forEach(function (id) {
+        document.getElementById(id).addEventListener("input", update);
+        document.getElementById(id).addEventListener("change", update);
+      });
+      document.getElementById("avatarFile").addEventListener("change", function (event) {
+        var file = event.target.files && event.target.files[0];
+        if (!file) {
+          imageData = "";
+          update();
+          return;
+        }
+        if (!file.type || file.type.indexOf("image/") !== 0) {
+          document.getElementById("status").textContent = "Please choose an image file.";
+          return;
+        }
+        var reader = new FileReader();
+        reader.onload = function () {
+          imageData = String(reader.result || "");
+          update();
+        };
+        reader.readAsDataURL(file);
+      });
+      document.getElementById("resetButton").addEventListener("click", function () {
+        ids.forEach(function (id) {
+          document.getElementById(id).value = defaults[id];
+        });
+        document.getElementById("avatarFile").value = "";
+        imageData = "";
+        update();
+      });
+      document.getElementById("printButton").addEventListener("click", function () {
+        window.print();
+      });
+      document.getElementById("copyButton").addEventListener("click", function () {
+        var text = value("message") + "\n\n" + value("caption") + "\n" + value("hashtags");
+        var status = document.getElementById("status");
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () {
+            status.textContent = "Post text copied.";
+          }).catch(function () {
+            fallbackCopy(text, status);
+          });
+        } else {
+          fallbackCopy(text, status);
+        }
+      });
+      function fallbackCopy(text, status) {
+        var field = document.createElement("textarea");
+        field.value = text;
+        field.style.position = "fixed";
+        field.style.left = "-10000px";
+        document.body.appendChild(field);
+        field.select();
+        try {
+          var ok = document.execCommand("copy");
+          status.textContent = ok ? "Post text copied." : "Copy was blocked by this browser.";
+        } catch (e) {
+          status.textContent = "Copy was blocked by this browser.";
+        }
+        document.body.removeChild(field);
+      }
+      update();
+    }());
+  //]]>
+  </script>
+</body>
+</html>
